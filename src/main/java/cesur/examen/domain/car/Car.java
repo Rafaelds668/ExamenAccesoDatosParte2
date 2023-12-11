@@ -3,6 +3,7 @@ package cesur.examen.domain.car;
 import cesur.examen.domain.client.Client;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.Hibernate;
 
 import java.io.Serializable;
 
@@ -10,22 +11,31 @@ import java.io.Serializable;
  * EXAMEN DE ACCESO A DATOS
  * Diciembre 2023
  *
- * Nombre del alumno:
- * Fecha:
+ * Nombre del alumno: Rafael Delgado Shepherd
+ * Fecha: 11/12/2023
  */
 
 
 @Data
+@Entity
+@Table (name = "garaje")
 public class Car implements Serializable {
 
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column (name = "matricula")
     private String plate;
 
+    @Column (name = "modelo")
     private String model;
 
+    @Column (name = "fabricante")
     private String manufacturer;
 
+    @ManyToOne
+    @JoinColumn(name = "cliente")
     private Client client;
 
     /**
@@ -33,6 +43,7 @@ public class Car implements Serializable {
      * from relationship.
      * @return
      */
+
     @Override
     public String toString() {
         return "Car{" +

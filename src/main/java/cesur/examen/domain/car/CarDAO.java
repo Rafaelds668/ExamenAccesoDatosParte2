@@ -14,8 +14,8 @@ import java.util.List;
  * EXAMEN DE ACCESO A DATOS
  * Diciembre 2023
  *
- * Nombre del alumno:
- * Fecha:
+ * Nombre del alumno: Rafael Delgado Shepherd
+ * Fecha: 11/12/2023
  */
 
 @Log
@@ -24,7 +24,18 @@ public class CarDAO implements DAO<Car> {
     public Car save(Car car) {
 
         /* Implement method here */
-
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(car);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
         return car;
     }
 
@@ -49,12 +60,21 @@ public class CarDAO implements DAO<Car> {
     }
 
     public List<Car> getAllByManufacturer(String manufacturer){
-        var out = new ArrayList<Car>();
-
-
         /* Implement method here */
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Car> cars = new ArrayList<>();
+        try {
+            String query = "from Car where manufacturer = :manufacturer";
+            cars = session.createQuery(query, Car.class)
+                    .setParameter("manufacturer", manufacturer)
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return cars;
 
-        return out;
     }
 
 
